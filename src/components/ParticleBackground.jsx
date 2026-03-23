@@ -73,7 +73,7 @@ const ParticleBackground = () => {
             className="fixed inset-0 w-full h-full"
             style={{ 
                 zIndex: 0, 
-                backgroundColor: '#060608', 
+                backgroundColor: '#030303', 
                 pointerEvents: 'none' 
             }}
         />

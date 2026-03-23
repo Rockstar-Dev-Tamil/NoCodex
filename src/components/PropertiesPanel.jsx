@@ -1,6 +1,7 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import useCanvasStore from '../store/useCanvasStore';
-import { Settings, MousePointer2, Trash2, Sliders, Type, Layout, Palette, AlignCenter, Bold, Layers } from 'lucide-react';
+import { Settings, MousePointer2, Trash2, Sliders, Type, Layout, Palette, AlignCenter, Bold, Layers, ChevronDown, Activity } from 'lucide-react';
 
 const PropertiesPanel = () => {
     const { elements, selectedId, updateElement, updateElementContent, removeElement } = useCanvasStore();
@@ -8,14 +9,14 @@ const PropertiesPanel = () => {
 
     if (!selectedElement) {
         return (
-            <aside className="right-panel-grid w-full h-full bg-[#060608] border-l border-[#1e1e2e] flex flex-col items-center justify-center p-12 text-center text-[#52526e] gap-10">
-                <div className="relative group p-10">
-                    <div className="absolute inset-0 bg-[#00e5ff]/5 filter blur-3xl group-hover:bg-[#00e5ff]/10" />
-                    <MousePointer2 size={64} className="opacity-10 group-hover:opacity-20 transition-all" />
+            <aside className="w-full h-full bg-[#030303] border-l border-white/5 flex flex-col items-center justify-center p-12 text-center glass">
+                <div className="relative group">
+                    <div className="absolute inset-0 bg-[#00f2ff]/5 filter blur-3xl group-hover:bg-[#00f2ff]/10 transition-all" />
+                    <MousePointer2 size={48} className="text-[#64748b] opacity-20 relative z-10" />
                 </div>
-                <div>
-                     <h4 className="text-[14px] font-[800] font-display text-white uppercase tracking-tight mb-2">No Selector Active</h4>
-                     <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#52526e]">Click any component in the console to edit its mission props.</p>
+                <div className="mt-8">
+                     <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-2 opacity-50">NO_TARGET_ACQUIRED</h4>
+                     <p className="text-[9px] uppercase font-bold tracking-widest text-[#64748b] max-w-[180px] leading-relaxed">Select a module from the primary viewport to initialize configuration.</p>
                 </div>
             </aside>
         );
@@ -32,152 +33,155 @@ const PropertiesPanel = () => {
     };
 
     return (
-        <aside className="right-panel-grid w-full h-full bg-[#060608] border-l border-[#1e1e2e] flex flex-col z-100 overflow-y-auto overflow-x-hidden">
-            <header className="px-6 py-6 border-b border-[#1e1e2e] flex items-center justify-between shrink-0">
+        <aside className="w-full h-full bg-[#030303] border-l border-white/5 flex flex-col z-[100] overflow-hidden glass">
+            <header className="px-6 py-6 border-b border-white/5 flex items-center justify-between shrink-0 bg-white/[0.01]">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-[#00e5ff]/10 text-[#00e5ff]">
-                        <Settings size={14} />
+                    <div className="w-8 h-8 rounded bg-[#00f2ff]/10 text-[#00f2ff] flex items-center justify-center border border-[#00f2ff]/20">
+                        <Activity size={16} />
                     </div>
                     <div>
-                         <h3 className="text-[11px] font-[800] font-display text-white uppercase tracking-widest leading-none mb-1">PROPS CONSOLE</h3>
-                         <p className="text-[9px] font-bold text-[#52526e] uppercase tracking-widest">{type} MODULE</p>
+                         <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em] leading-none mb-1">MODULE_PROPS</h3>
+                         <p className="text-[9px] font-bold text-[#00f2ff] uppercase tracking-widest opacity-80">{type}</p>
                     </div>
                 </div>
                 <button 
                     onClick={() => removeElement(selectedId)}
-                    className="p-2.5 rounded-lg text-red-400 hover:bg-red-500/10 transition-all"
+                    className="p-2 rounded-md text-[#64748b] hover:text-red-400 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20"
                 >
-                    <Trash2 size={14} />
+                    <Trash2 size={16} />
                 </button>
             </header>
 
-            <div className="flex-1 px-8 py-10 flex flex-col gap-10 custom-scrollbar">
-                {/* Section 1: Visual styling */}
-                <div className="space-y-6">
-                    <label className="text-[10px] font-black font-display text-[#52526e] uppercase tracking-[0.2em] flex items-center gap-2">
-                        <Palette size={12} className="text-[#00e5ff]" /> COMPONENT VISUALS
-                    </label>
-                    <div className="space-y-6">
-                        {/* Background Color Picker */}
-                        <div className="space-y-2">
-                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-[10px] font-bold text-[#52526e] uppercase tracking-widest">Surface Fill</label>
-                                <span className="text-[9px] font-mono text-[#52526e]">{props.background}</span>
-                             </div>
-                            <div className="flex items-center gap-2 bg-[#0f0f14] p-2 rounded-xl border border-[#1e1e2e]">
-                                <input 
-                                    type="color" 
-                                    value={props.background}
-                                    onChange={(e) => handlePropChange('background', e.target.value)}
-                                    className="w-10 h-8 bg-transparent border-none outline-none cursor-pointer rounded-lg"
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
+                <AnimatePresence mode="wait">
+                    <motion.div 
+                        key={selectedId}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-6 space-y-8 pb-12"
+                    >
+                        {/* Section: Visuals */}
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-2 text-[9px] font-black text-[#64748b] uppercase tracking-[0.3em] opacity-50">
+                                <Palette size={12} /> VISUAL_BUFFERS
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-3">
+                                <ColorInput 
+                                    label="SURFACE" 
+                                    value={props.background} 
+                                    onChange={(val) => handlePropChange('background', val)} 
                                 />
-                                <div className="flex-1 text-[10px] font-mono text-white/40 overflow-hidden">{props.background}</div>
-                            </div>
-                        </div>
-
-                        {/* Text Color Picker */}
-                        <div className="space-y-2">
-                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-[10px] font-bold text-[#52526e] uppercase tracking-widest">Text Fill</label>
-                                <span className="text-[9px] font-mono text-[#52526e]">{props.color}</span>
-                             </div>
-                             <div className="flex items-center gap-2 bg-[#0f0f14] p-2 rounded-xl border border-[#1e1e2e]">
-                                <input 
-                                    type="color" 
-                                    value={props.color}
-                                    onChange={(e) => handlePropChange('color', e.target.value)}
-                                    className="w-10 h-8 bg-transparent border-none outline-none cursor-pointer rounded-lg"
+                                <ColorInput 
+                                    label="TEXT" 
+                                    value={props.color} 
+                                    onChange={(val) => handlePropChange('color', val)} 
                                 />
-                                <div className="flex-1 text-[10px] font-mono text-white/40 overflow-hidden">{props.color}</div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="w-full h-px bg-[#1e1e2e]" />
+                        <div className="h-px bg-white/5" />
 
-                {/* Section 2: Typography & Sizing */}
-                <div className="space-y-8">
-                    <label className="text-[10px] font-black font-display text-[#52526e] uppercase tracking-[0.2em] flex items-center gap-2">
-                        <Sliders size={12} className="text-[#7c3aed]" /> MAGNITUDE & SCALE
-                    </label>
-                    <div className="space-y-8">
-                        {/* Font Size Swatch */}
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <label className="text-[10px] font-bold text-[#52526e] uppercase tracking-widest">Font Magnitude</label>
-                                <span className="px-2 py-0.5 bg-[#1e1e2e] rounded text-[10px] font-mono text-white">{props.fontSize}</span>
+                        {/* Section: Magnitude */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 text-[9px] font-black text-[#64748b] uppercase tracking-[0.3em] opacity-50">
+                                <Sliders size={12} /> MAGNITUDE_SCALES
                             </div>
-                            <input 
-                                type="range" min="12" max="120" step="2"
-                                value={parseInt(props.fontSize)}
-                                onChange={(e) => handlePropChange('fontSize', `${e.target.value}px`)}
-                                className="w-full accent-[#00e5ff] opacity-60 hover:opacity-100 transition-opacity"
+                            
+                            <RangeInput 
+                                label="FONT_SIZE" 
+                                value={parseInt(props.fontSize)} 
+                                unit="PX"
+                                min={12} max={120} 
+                                onChange={(val) => handlePropChange('fontSize', `${val}px`)} 
+                            />
+
+                            <RangeInput 
+                                label="INTERNAL_PADDING" 
+                                value={parseInt(props.padding)} 
+                                unit="PX"
+                                min={0} max={200} 
+                                onChange={(val) => handlePropChange('padding', `${val}px`)} 
+                            />
+
+                            <RangeInput 
+                                label="BORDER_RADIUS" 
+                                value={parseInt(props.borderRadius)} 
+                                unit="PX"
+                                min={0} max={80} 
+                                onChange={(val) => handlePropChange('borderRadius', `${val}px`)} 
                             />
                         </div>
 
-                        {/* Padding Slider */}
+                        <div className="h-px bg-white/5" />
+
+                        {/* Section: Content */}
                         <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <label className="text-[10px] font-bold text-[#52526e] uppercase tracking-widest">Internal Sector Padding</label>
-                                <span className="px-2 py-0.5 bg-[#1e1e2e] rounded text-[10px] font-mono text-white">{props.padding}</span>
+                            <div className="flex items-center gap-2 text-[9px] font-black text-[#64748b] uppercase tracking-[0.3em] opacity-50">
+                                <Type size={12} /> DATA_STRINGS
                             </div>
-                            <input 
-                                type="range" min="0" max="200" step="4"
-                                value={parseInt(props.padding)}
-                                onChange={(e) => handlePropChange('padding', `${e.target.value}px`)}
-                                className="w-full accent-[#00e5ff] opacity-60 hover:opacity-100 transition-opacity"
-                            />
+                            
+                            <div className="space-y-4">
+                                {Object.keys(content).map((key) => (
+                                    <div key={key} className="space-y-2">
+                                        <label className="text-[9px] font-bold text-[#64748b] uppercase tracking-widest pl-1">{key}</label>
+                                        <input 
+                                            type="text" 
+                                            value={content[key]}
+                                            onChange={(e) => handleContentChange(key, e.target.value)}
+                                            className="w-full bg-white/5 border border-white/5 rounded-md px-4 py-3 text-[10px] font-bold text-white focus:border-[#00f2ff]/30 outline-none transition-all"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-
-                        {/* Border Radius */}
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <label className="text-[10px] font-bold text-[#52526e] uppercase tracking-widest">Module Curvature</label>
-                                <span className="px-2 py-0.5 bg-[#1e1e2e] rounded text-[10px] font-mono text-white">{props.borderRadius}</span>
-                            </div>
-                            <input 
-                                type="range" min="0" max="80" step="2"
-                                value={parseInt(props.borderRadius)}
-                                onChange={(e) => handlePropChange('borderRadius', `${e.target.value}px`)}
-                                className="w-full accent-[#00e5ff] opacity-60 hover:opacity-100 transition-opacity"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="w-full h-px bg-[#1e1e2e]" />
-
-                {/* Section 3: Data Integrity */}
-                <div className="space-y-6">
-                    <label className="text-[10px] font-black font-display text-[#52526e] uppercase tracking-[0.2em] flex items-center gap-2">
-                        <Bold size={12} className="text-[#00e5ff]" /> SOURCE VALUES
-                    </label>
-                    <div className="space-y-4">
-                        {Object.keys(content).map((key) => (
-                            <div key={key} className="space-y-2">
-                                <label className="text-[10px] font-bold text-[#52526e] uppercase mb-1">{key}</label>
-                                <div className="bg-[#0f0f14] border border-[#1e1e2e] rounded-xl px-4 py-1 flex items-center">
-                                     <input 
-                                        type="text" 
-                                        value={content[key]}
-                                        onChange={(e) => handleContentChange(key, e.target.value)}
-                                        className="w-full bg-transparent border-none outline-none py-3 text-[11px] text-white focus:text-[#00e5ff] transition-all"
-                                     />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                    </motion.div>
+                </AnimatePresence>
             </div>
             
-            <footer className="p-8 border-t border-[#1e1e2e] bg-[#0f0f14]/50">
-                 <div className="text-[8px] font-bold text-[#52526e] uppercase tracking-[0.3em] leading-relaxed text-center opacity-40">
-                    Prop mutations are broadcasted in real-time to the active sector console.
+            <footer className="p-6 border-t border-white/5 bg-black/40">
+                 <div className="text-[8px] font-black text-[#64748b] uppercase tracking-[0.3em] leading-relaxed text-center opacity-30">
+                    REALTIME_STREAM_ACTIVE // SYNC_SUCCESS
                  </div>
             </footer>
         </aside>
     );
 };
+
+const ColorInput = ({ label, value, onChange }) => (
+    <div className="space-y-2">
+        <label className="text-[9px] font-black text-[#64748b] uppercase tracking-widest pl-1">{label}</label>
+        <div className="relative group">
+            <input 
+                type="color" 
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
+            <div className="w-full h-10 bg-white/5 border border-white/5 rounded-md flex items-center px-3 gap-3 group-hover:bg-white/[0.07] transition-all">
+                <div className="w-4 h-4 rounded-full border border-white/10 shadow-sm" style={{ backgroundColor: value }} />
+                <span className="text-[10px] font-mono text-white/40 uppercase tracking-tighter">{value}</span>
+            </div>
+        </div>
+    </div>
+);
+
+const RangeInput = ({ label, value, unit, min, max, onChange }) => (
+    <div className="space-y-3">
+        <div className="flex justify-between items-center px-1">
+            <label className="text-[9px] font-black text-[#64748b] uppercase tracking-widest">{label}</label>
+            <span className="text-[9px] font-mono text-[#00f2ff] bg-[#00f2ff]/10 px-1.5 py-0.5 rounded border border-[#00f2ff]/20">{value}{unit}</span>
+        </div>
+        <div className="relative flex items-center">
+            <input 
+                type="range" 
+                min={min} max={max}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-[#00f2ff]"
+            />
+        </div>
+    </div>
+);
 
 export default PropertiesPanel;

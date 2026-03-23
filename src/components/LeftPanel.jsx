@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Layout, Layers, Type, Image as ImageIcon, Box, Minus, Footprints, MessageSquare, Square, List, Search, Trash2, Layers3, Rocket, Terminal, MousePointer2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Layout, Layers, Type, Image as ImageIcon, Box, Minus, Footprints, MessageSquare, Square, List, Search, Trash2, Layers3, Rocket, Terminal, MousePointer2, Component, ChevronRight } from 'lucide-react';
 import useCanvasStore from '../store/useCanvasStore';
 import { useDraggable } from '@dnd-kit/core';
 
-const DraggableItem = ({ type, icon, label, payload }) => {
+const DraggableItem = ({ type, icon, label, payload, index }) => {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-        id: `drag-${type}`,
+        id: `drag-${type}-${index}`,
         data: { type, payload }
     });
 
@@ -20,12 +21,12 @@ const DraggableItem = ({ type, icon, label, payload }) => {
             style={style} 
             {...listeners} 
             {...attributes}
-            className={`indie-card p-3.5 rounded-xl border border-[#1e1e2e] flex items-center gap-4 cursor-grab active:cursor-grabbing hover:border-[#52526e] hover:bg-[#0f0f14] group transition-all duration-300 ${isDragging ? 'opacity-30' : ''}`}
+            className={`indie-card p-3 rounded-md border-white/5 flex items-center gap-3 cursor-grab active:cursor-grabbing hover:bg-white/5 group transition-all duration-200 ${isDragging ? 'opacity-30' : ''}`}
         >
-            <div className="p-2.5 rounded-lg bg-[#1e1e2e] group-hover:bg-[#00e5ff]/10 group-hover:text-[#00e5ff] transition-colors">
+            <div className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-[#64748b] group-hover:text-[#00f2ff] group-hover:bg-[#00f2ff]/10 transition-colors">
                 {icon}
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#52526e] group-hover:text-white transition-all">{label}</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#64748b] group-hover:text-white transition-all">{label}</span>
         </div>
     );
 };
@@ -36,111 +37,154 @@ const LeftPanel = () => {
 
     const library = [
         { 
-            group: 'Layout', 
+            group: 'Layout Modules', 
             items: [
-                { type: 'Hero', icon: <Rocket size={18} />, label: 'Hero Section', payload: { type: 'Hero', content: { title: 'Welcome to Space', subtitle: 'The final frontier.' } } },
-                { type: 'Section', icon: <Layout size={18} />, label: 'Standard Section', payload: { type: 'Section', content: { title: 'New Nebula Content', text: 'This is a standard section.' } } },
-                { type: 'Divider', icon: <Minus size={18} />, label: 'Subtle Divider', payload: { type: 'Divider', content: {} } },
+                { type: 'Hero', icon: <Rocket size={16} />, label: 'Hero Block', payload: { type: 'Hero', content: { title: 'VELOCITY X', subtitle: 'REDEFINING SPEED' } } },
+                { type: 'Section', icon: <Layout size={16} />, label: 'Standard Box', payload: { type: 'Section', content: { title: 'CORE DATA', text: 'HIGH PERFORMANCE ASSET' } } },
+                { type: 'Divider', icon: <Minus size={16} />, label: 'Magnitude Line', payload: { type: 'Divider', content: {} } },
             ] 
         },
         { 
-            group: 'Content', 
+            group: 'Atomic Units', 
             items: [
-                { type: 'Heading', icon: <Type size={18} />, label: 'Large Heading', payload: { type: 'Heading', content: { text: 'UNIVERSE TITLE' } } },
-                { type: 'Text', icon: <List size={18} />, label: 'Body Text Content', payload: { type: 'Text', content: { text: 'A long paragraph about the mysteries of the cosmos and beyond.' } } },
-                { type: 'Image', icon: <ImageIcon size={18} />, label: 'Media Display', payload: { type: 'Image', content: { src: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa', alt: 'Space View' } } },
-                { type: 'Button', icon: <Square size={18} />, label: 'Action Button', payload: { type: 'Button', content: { text: 'INITIATE WARP' } } },
+                { type: 'Heading', icon: <Type size={16} />, label: 'Title String', payload: { type: 'Heading', content: { text: 'DATA HEADER' } } },
+                { type: 'Text', icon: <List size={16} />, label: 'Text Stream', payload: { type: 'Text', content: { text: 'Standard telemetry readout.' } } },
+                { type: 'Image', icon: <ImageIcon size={16} />, label: 'Visual Buffer', payload: { type: 'Image', content: { src: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa', alt: 'Buffer' } } },
+                { type: 'Button', icon: <Square size={16} />, label: 'Call Action', payload: { type: 'Button', content: { text: 'INITIALIZE' } } },
             ] 
         },
         { 
-            group: 'Navigation', 
+            group: 'Global Blocks', 
             items: [
-                { type: 'Navbar', icon: <Box size={18} />, label: 'Sticky Navbar', payload: { type: 'Navbar', content: { logo: 'OrbitX', links: ['Home', 'Mission', 'Contact'] } } },
-                { type: 'Footer', icon: <Footprints size={18} />, label: 'Minimal Footer', payload: { type: 'Footer', content: { text: '© 2026 Cosmic Inc.' } } },
+                { type: 'Navbar', icon: <Box size={16} />, label: 'Command Nav', payload: { type: 'Navbar', content: { logo: 'X-CORE', links: ['Home', 'Data', 'System'] } } },
+                { type: 'Footer', icon: <Footprints size={16} />, label: 'Baseline', payload: { type: 'Footer', content: { text: '© 2026 NOCODEX CORE' } } },
             ] 
         }
     ];
 
     return (
-        <aside className="left-panel-grid w-full bg-[#060608] border-r border-[#1e1e2e] flex flex-col z-100">
+        <aside className="w-full h-full overflow-hidden bg-[#030303] border-r border-white/5 flex flex-col z-[100] glass">
+            {/* Search Bar */}
+            <div className="p-6 pb-0">
+                <div className="relative group">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#64748b] group-focus-within:text-[#00f2ff] transition-colors" />
+                    <input 
+                        type="text" 
+                        placeholder="SEARCH ASSETS..." 
+                        className="w-full bg-white/5 border border-white/5 rounded-md py-2 pl-10 pr-4 text-[10px] font-black tracking-widest uppercase focus:border-[#00f2ff]/50 outline-none transition-all placeholder:text-[#64748b]/50"
+                    />
+                </div>
+            </div>
+
             {/* Tab Bar */}
-            <div className="flex bg-[#0f0f14] p-1.5 m-6 rounded-2xl border border-[#1e1e2e] shrink-0">
-                <button 
+            <div className="flex bg-white/5 p-1 m-6 rounded-lg border border-white/5 shrink-0">
+                <TabButton 
+                    active={activeTab === 'components'} 
                     onClick={() => setActiveTab('components')} 
-                    className={`flex-1 py-2.5 text-[0.7rem] font-[800] font-display uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'components' ? 'bg-[#1e1e2e] text-[#00e5ff] shadow-xl' : 'text-[#52526e] hover:text-white'}`}
-                >
-                    <Box size={14} /> LIBRARY
-                </button>
-                <button 
+                    icon={<Component size={14} />} 
+                    label="ASSETS"
+                />
+                <TabButton 
+                    active={activeTab === 'layers'} 
                     onClick={() => setActiveTab('layers')} 
-                    className={`flex-1 py-2.5 text-[0.7rem] font-[800] font-display uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'layers' ? 'bg-[#1e1e2e] text-[#b49cfc] shadow-xl' : 'text-[#52526e] hover:text-white'}`}
-                >
-                    <Layers3 size={14} /> LAYERS
-                </button>
+                    icon={<Layers3 size={14} />} 
+                    label="LAYERS"
+                />
             </div>
 
             {/* Content Area */}
             <div className="flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar">
-                {activeTab === 'components' ? (
-                    <div className="flex flex-col gap-10 pb-8">
-                        {library.map((group) => (
-                            <div key={group.group}>
-                                <h4 className="text-[10px] font-black font-display text-[#52526e] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 pl-2">
-                                     <div className="w-1.5 h-1.5 rounded-full bg-[#00e5ff]/40" /> {group.group}
-                                </h4>
-                                <div className="flex flex-col gap-3">
-                                    {group.items.map((item) => (
-                                        <DraggableItem key={item.type} {...item} />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="flex flex-col gap-3">
-                        {elements.length > 0 ? elements.map((el, i) => (
-                            <div 
-                                key={el.id} 
-                                onClick={() => selectElement(el.id)}
-                                className={`flex items-center justify-between p-4 rounded-xl border border-[#1e1e2e] transition-all cursor-pointer group ${selectedId === el.id ? 'border-[#00e5ff] bg-[#00e5ff]/5 ring-1 ring-[#00e5ff]/30' : 'hover:border-[#52526e] bg-[#0f0f14]'}`}
-                            >
-                                <div className="flex items-center gap-4 min-w-0">
-                                    <div className={`p-1.5 rounded-lg border border-[#1e1e2e] ${selectedId === el.id ? 'text-[#00e5ff] bg-[#00e5ff]/10 border-[#00e5ff]/30' : 'text-[#52526e] bg-[#060608]'}`}>
-                                        <Box size={12} />
+                <AnimatePresence mode="wait">
+                    {activeTab === 'components' ? (
+                        <motion.div 
+                            key="components"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 10 }}
+                            className="flex flex-col gap-8 pb-8"
+                        >
+                            {library.map((group) => (
+                                <div key={group.group}>
+                                    <h4 className="text-[9px] font-black text-[#64748b] uppercase tracking-[0.3em] mb-4 flex items-center gap-2 pl-1 opacity-50">
+                                         {group.group}
+                                    </h4>
+                                    <div className="flex flex-col gap-2">
+                                        {group.items.map((item, idx) => (
+                                            <DraggableItem key={item.type} {...item} index={idx} />
+                                        ))}
                                     </div>
-                                    <span className={`text-[11px] font-bold uppercase tracking-widest truncate ${selectedId === el.id ? 'text-white' : 'text-[#52526e] group-hover:text-white'}`}>
-                                        {el.type}
-                                    </span>
                                 </div>
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); removeElement(el.id); }}
-                                    className="p-1.5 rounded-lg text-[#52526e] hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
-                                >
-                                    <Trash2 size={12} />
-                                </button>
-                            </div>
-                        )) : (
-                            <div className="text-center py-32 flex flex-col items-center gap-6">
-                                <Rocket className="w-12 h-12 text-[#52526e] opacity-10" />
-                                <p className="text-[10px] font-black uppercase tracking-widest text-[#52526e]/30 px-8 leading-relaxed">No elements deployed yet.</p>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            ))}
+                        </motion.div>
+                    ) : (
+                        <motion.div 
+                            key="layers"
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            className="flex flex-col gap-1"
+                        >
+                            {elements.length > 0 ? elements.map((el, i) => (
+                                <LayerItem 
+                                    key={el.id} 
+                                    element={el} 
+                                    isSelected={selectedId === el.id}
+                                    onSelect={() => selectElement(el.id)}
+                                    onRemove={() => removeElement(el.id)}
+                                />
+                            )) : (
+                                <div className="text-center py-20 opacity-20 flex flex-col items-center gap-4">
+                                    <Layers className="w-10 h-10" />
+                                    <p className="text-[10px] font-black uppercase tracking-widest">WORKSPACE_VOID</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
             
-            <div className="p-6 border-t border-[#1e1e2e] bg-[#060608]">
-                <div className="px-5 py-4 rounded-2xl bg-[#0f0f14] border border-[#1e1e2e]">
-                    <div className="flex items-center gap-2 mb-2 text-[#00e5ff] font-display font-black text-[9px] uppercase tracking-widest">
-                        <Terminal size={10} /> BUILDER HINT
+            <div className="p-6 border-t border-white/5 bg-black/40">
+                <div className="px-5 py-4 rounded-lg bg-white/[0.02] border border-white/5">
+                    <div className="flex items-center gap-2 mb-2 text-[#00f2ff] font-black text-[9px] uppercase tracking-widest">
+                        <Terminal size={12} strokeWidth={3} /> SYSTEM_READOUT
                     </div>
-                    <p className="text-[10px] text-[#52526e] font-medium leading-[1.3] opacity-80">
-                        Drag elements directly onto the canvas in the center to build your site. Double click elements to edit text.
+                    <p className="text-[10px] text-[#64748b] font-bold leading-relaxed uppercase tracking-wider opacity-60">
+                        Drag assets to primary viewport. Double-click strings to re-initialize data.
                     </p>
                 </div>
             </div>
         </aside>
     );
 };
+
+const TabButton = ({ active, onClick, icon, label }) => (
+    <button 
+        onClick={onClick} 
+        className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-md transition-all flex items-center justify-center gap-2 ${active ? 'bg-white/10 text-white shadow-xl ring-1 ring-white/5' : 'text-[#64748b] hover:text-white hover:bg-white/[0.02]'}`}
+    >
+        {icon} {label}
+    </button>
+);
+
+const LayerItem = ({ element, isSelected, onSelect, onRemove }) => (
+    <div 
+        onClick={onSelect}
+        className={`group flex items-center justify-between p-3 rounded-md transition-all cursor-pointer border border-transparent ${isSelected ? 'bg-[#00f2ff]/10 text-[#00f2ff] border-[#00f2ff]/20' : 'hover:bg-white/5 text-[#64748b]'}`}
+    >
+        <div className="flex items-center gap-3 min-w-0">
+            <ChevronRight size={12} className={`transition-transform ${isSelected ? 'rotate-90 text-[#00f2ff]' : 'opacity-20'}`} />
+            <Box size={14} />
+            <span className={`text-[10px] font-black uppercase tracking-widest truncate ${isSelected ? 'text-white' : ''}`}>
+                {element.type}
+            </span>
+        </div>
+        <button 
+            onClick={(e) => { e.stopPropagation(); onRemove(); }}
+            className={`p-1.5 rounded-md hover:text-red-400 hover:bg-red-500/10 transition-all ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+        >
+            <Trash2 size={12} />
+        </button>
+    </div>
+);
 
 export default LeftPanel;

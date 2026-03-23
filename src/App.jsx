@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
@@ -8,10 +8,13 @@ import PreviewPage from './pages/PreviewPage';
 import NotFound from './pages/NotFound';
 import ParticleBackground from './components/ParticleBackground';
 
-const App = () => {
+const AppContent = () => {
+  const location = useLocation();
+  const showParticles = ['/', '/dashboard', '/404'].includes(location.pathname);
+
   return (
-    <Router>
-      <ParticleBackground />
+    <>
+      {showParticles && <ParticleBackground />}
       <div className="relative min-h-screen z-10">
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -24,15 +27,26 @@ const App = () => {
       </div>
       <Toaster position="bottom-right" toastOptions={{
         style: {
-          background: 'rgba(255, 255, 255, 0.05)',
-          color: '#e8e8ff',
+          background: 'rgba(10, 10, 12, 0.9)',
+          color: '#f8fafc',
           backdropFilter: 'blur(16px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
-          fontFamily: 'Orbitron, sans-serif'
+          fontFamily: "'Outfit', sans-serif",
+          fontSize: '13px',
+          fontWeight: 600,
         }
       }} />
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 };
 
 export default App;
+
