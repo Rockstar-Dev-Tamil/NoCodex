@@ -1,6 +1,6 @@
 # 🏗️ NoCodeX: Full System Architecture
 
-> **Note:** It is nor fully completed project, it's 30-49% completeed p[roject
+> **Note:** It is not fully completed project, it's 30-49% completeed project
 
 ## 1. The Core Stack (The Propulsion)
 **Framework:** React 19 + Vite 6 (Powered by the Rolldown engine for ultra-fast builds).
