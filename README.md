@@ -1,62 +1,66 @@
-# 🚀 NoCodeX — Orbital Website Builder
+# 🏗️ NoCodeX: Full System Architecture
 
-NoCodeX is a next-generation, antigravity no-code website builder designed for the creative explorer. Build, preview, and deploy high-performance websites without writing a single line of code.
+> **Note:** It is nor fully completed project, it's 30-49% completeed p[roject
 
-![NoCodeX Dashboard](https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200)
+## 1. The Core Stack (The Propulsion)
+**Framework:** React 19 + Vite 6 (Powered by the Rolldown engine for ultra-fast builds).
+**Aesthetic System:** Tailwind-lite via `index.css`. A custom-engineered utility system using HSL CSS variables for the "Indie Developer" palette.
+**State Control:** Zustand. A zero-gravity state manager handling the complex element trees, command history (Undo/Redo), and project synchronization.
+**Drag & Drop Engine:** `@dnd-kit`. A coordinate-based interaction system using PointerSensors and RectIntersection for physical, responsive movements.
 
-## ✨ Stellar Features
-
-- **Gravity-Free Canvas**: Effortless drag-and-drop experience.
-- **Multiverse Preview**: Instantly switch between mobile, tablet, and desktop viewports.
-- **Nebula Deployment**: One-click fake deployment with real-world progress tracking.
-- **Quantum Export**: Clean, production-ready HTML5 & Tailwind CSS code export.
-- **Zero-Latency State**: Automatic persistence via localStorage and historical undo/redo stack.
-
-## 🛸 Tech Stack
-
-- **Framework**: React 18 + Vite
-- **State**: Zustand (with History)
-- **Drag & Drop**: @dnd-kit
-- **Aesthetics**: Vanilla CSS (Space Glassmorphism)
-- **Icons**: Lucide React
-- **Notifications**: React Hot Toast
-
-## 🛠 Space Center Operations
-
-### 1. Clone & Board the Ship
-```bash
-git clone https://github.com/your-username/nocodex.git
-cd nocodex
-npm install
+## 2. File Topology (The Sector Map)
+```text
+nocodex/
+├── src/
+│   ├── store/
+│   │   └── useCanvasStore.js   <-- The Brain: State, History, Logic
+│   ├── components/
+│   │   ├── TopBar.jsx         <-- Mission Console (Viewport/Actions)
+│   │   ├── LeftPanel.jsx       <-- Component Library (Draggables)
+│   │   ├── Canvas.jsx          <-- Deploy Zone (Droppable)
+│   │   ├── CanvasElement.jsx   <-- Mission Modules (The actual UI)
+│   │   ├── PropertiesPanel.jsx <-- Magnitude Modifiers (Settings)
+│   │   ├── ExportModal.jsx     <-- Source Code Generator (HTML/TW)
+│   │   └── DeployModal.jsx     <-- Broadcast Sequence (UX)
+│   ├── pages/
+│   │   ├── LandingPage.jsx     <-- Marketing Front (Indie Aesthetic)
+│   │   ├── EditorPage.jsx      <-- The Forge (3-Column Interface)
+│   │   └── DashboardPage.jsx   <-- Mission Deck (Project Management)
+│   └── index.css               <-- The Design Token System
 ```
 
-### 2. Ignition (Local Development)
-```bash
-npm run dev
-```
+## 3. Logic & Data Flow (The Flight Path)
+### A. The State Machine (`useCanvasStore.js`)
+The entire application state lives in a single JSON tree.
 
-### 3. Warp Speed (Production Build)
-```bash
-npm run build
-```
+- **Elements Array:** A list of objects containing `id`, `type`, content (text/urls), and props (visual settings).
+- **History Stack:** A 20-step deep buffer storing serialized JSON snapshots of the canvas for instant Undo/Redo via state slicing.
+- **ID Generation:** Uses the browser's native `crypto.randomUUID()` for collision-free element targeting.
 
-### 4. Deploy to Vercel
-Install the Vercel CLI and launch your mission:
-```bash
-npm install -g vercel
-vercel
-```
-*Make sure to select "Vite" as the framework preset.*
+### B. The Interaction Loop (DND Logic)
+- **Selection:** Clicking a `CanvasElement` broadcasts an ID to the `selectedId` state, activating the `PropertiesPanel`.
+- **Drag-to-Deploy:** Sidebar items have `useDraggable`. When dropped on the `Canvas` (via `useDroppable`), the `addElement` logic pushes a new payload into the elements array.
+- **Sortable Reordering:** Uses `arrayMove` to shift indices inside the list without breaking element ID references, keeping the DOM synchronized with the state.
 
-## 🛰 Project Structure
-- `src/pages`: Landing, Dashboard, Editor, Preview, and Lost-in-Space (404).
-- `src/store`: Global Zustand store with state persistence.
-- `src/components`: Glassmorphism UI components and Canvas engine.
-- `src/utils`: Custom code generation engines.
+### C. Component Rendering (The Modules)
+Each module in `CanvasElement.jsx` is Reactive.
 
-## 🌌 Designed by the Edge of the Multiverse
-NoCodeX uses the **Orbitron** typeface for a futuristic feel and **DM Sans** for legibility. Glassmorphism cards and neon glow pulses create a premium, state-of-the-art interface.
+- **Heading/Text:** Rendered as transparent inputs/textareas to allow Direct Canvas Editing.
+- **Prop Propagation:** CSS Variables (background, color, padding) are calculated at the component level and injected into a container style object for real-time visual mutation.
 
----
-*Built for the next generation of web explorers.*
-"# NoCodex" 
+### D. The Code Transpiler
+In `ExportModal.jsx`, a custom loop iterates through the active element tree, mapping each Indie-Module to raw, production-ready HTML and Tailwind CSS. It injects Google Font links (Syne/Inter) automatically to ensure the exported site matches the builder.
+
+## 4. Design Tokens (The Visual Signature)
+- **Display Font:** Syne (800 weight) for tectonic hierarchy.
+- **Body Font:** Inter for technical readability.
+- **Primary Fill:** `#00e5ff` (Cyan) — Used for "Mission Active" states.
+- **Surface Core:** `#060608` (Deep Black) — Zero-gravity background.
+- **Sector Border:** `#1e1e2e` — Subtle "pro-tool" delineations.
+
+## 5. Why It Works (The Core Logic)
+NoCodeX doesn't just "place" items; it simulates a Sector Workspace. The layout is strictly grid-based (300px | 1fr | 340px), ensuring your mission controls never overlap with your build results.
+
+Your entire project is stored in the browser's Local Storage under the key `nocodex_projects`, making it persistence-ready without requiring a backend for the development phase.
+
+The system is currently fully locked, synced, and operational. 🚀🏗️✨
