@@ -1,66 +1,55 @@
-# 🏗️ NoCodeX: Full System Architecture
+# 🚀 NoCodeX — Orbital Website Builder
 
 > **Note:** It is not fully completed project, it's 30-49% completeed project
 
-## 1. The Core Stack (The Propulsion)
-**Framework:** React 19 + Vite 6 (Powered by the Rolldown engine for ultra-fast builds).
-**Aesthetic System:** Tailwind-lite via `index.css`. A custom-engineered utility system using HSL CSS variables for the "Indie Developer" palette.
-**State Control:** Zustand. A zero-gravity state manager handling the complex element trees, command history (Undo/Redo), and project synchronization.
-**Drag & Drop Engine:** `@dnd-kit`. A coordinate-based interaction system using PointerSensors and RectIntersection for physical, responsive movements.
+NoCodeX is a next-generation, high-performance, drag-and-drop website building engine. Designed with a custom "Indie Developer" aesthetic and zero-gravity interaction patterns, it bridges the gap between no-code simplicity and developer-grade control.
 
-## 2. File Topology (The Sector Map)
-```text
-nocodex/
-├── src/
-│   ├── store/
-│   │   └── useCanvasStore.js   <-- The Brain: State, History, Logic
-│   ├── components/
-│   │   ├── TopBar.jsx         <-- Mission Console (Viewport/Actions)
-│   │   ├── LeftPanel.jsx       <-- Component Library (Draggables)
-│   │   ├── Canvas.jsx          <-- Deploy Zone (Droppable)
-│   │   ├── CanvasElement.jsx   <-- Mission Modules (The actual UI)
-│   │   ├── PropertiesPanel.jsx <-- Magnitude Modifiers (Settings)
-│   │   ├── ExportModal.jsx     <-- Source Code Generator (HTML/TW)
-│   │   └── DeployModal.jsx     <-- Broadcast Sequence (UX)
-│   ├── pages/
-│   │   ├── LandingPage.jsx     <-- Marketing Front (Indie Aesthetic)
-│   │   ├── EditorPage.jsx      <-- The Forge (3-Column Interface)
-│   │   └── DashboardPage.jsx   <-- Mission Deck (Project Management)
-│   └── index.css               <-- The Design Token System
-```
+---
 
-## 3. Logic & Data Flow (The Flight Path)
-### A. The State Machine (`useCanvasStore.js`)
-The entire application state lives in a single JSON tree.
+## ✨ Core Propulsion Systems (Features)
+- **Zero-Latency State Control**: Powered by **Zustand**. Complex element trees, instant command history (Undo/Redo), and project synchronization run at maximum velocity over a single JSON tree.
+- **Physical Drag & Drop Engine**: Driven by `@dnd-kit`. Coordinate-based interactions let you move "Mission Modules" precisely across the deployment grid.
+- **Multi-Viewport Forging**: A strict 3-column sector map interface (Component Library → Responsive Canvas → Magnitude Settings) ensures your tools never obscure your build.
+- **Code Transpiler**: Map your visual components directly to raw, production-ready HTML5 and Tailwind CSS. Fonts like *Syne* and *Inter* are seamlessly injected into your export.
 
-- **Elements Array:** A list of objects containing `id`, `type`, content (text/urls), and props (visual settings).
-- **History Stack:** A 20-step deep buffer storing serialized JSON snapshots of the canvas for instant Undo/Redo via state slicing.
-- **ID Generation:** Uses the browser's native `crypto.randomUUID()` for collision-free element targeting.
+## 🛸 Technology Stack
+- **Framework:** React 19 + Vite 6
+- **Build Engine:** Rolldown (Ultra-fast module bundling)
+- **State Management:** Zustand
+- **Drag & Drop Logic:** `@dnd-kit/core` and `@dnd-kit/sortable`
+- **Styling Options:** Vanilla CSS Custom Properties (HSL Token System) & Tailwind-lite
+- **Persistence:** Local Storage
 
-### B. The Interaction Loop (DND Logic)
-- **Selection:** Clicking a `CanvasElement` broadcasts an ID to the `selectedId` state, activating the `PropertiesPanel`.
-- **Drag-to-Deploy:** Sidebar items have `useDraggable`. When dropped on the `Canvas` (via `useDroppable`), the `addElement` logic pushes a new payload into the elements array.
-- **Sortable Reordering:** Uses `arrayMove` to shift indices inside the list without breaking element ID references, keeping the DOM synchronized with the state.
+## 🌌 The Design Token System
+Our aesthetic system utilizes a deeply customized Indie Developer palette designed for premium visual impact out-of-the-box:
+- **Tectonic Typography:** Syne Font (Display weights)
+- **Technical Readability:** Inter Font (Body text)
+- **Mission Active State:** `#00e5ff` (Vibrant Cyan)
+- **Zero-Gravity Surface:** `#060608` (Deep, Void Black)
+- **Sector Bounds:** `#1e1e2e` (Subtle Pro-Tool Borders)
 
-### C. Component Rendering (The Modules)
-Each module in `CanvasElement.jsx` is Reactive.
+## 🛠 Space Center Operations
 
-- **Heading/Text:** Rendered as transparent inputs/textareas to allow Direct Canvas Editing.
-- **Prop Propagation:** CSS Variables (background, color, padding) are calculated at the component level and injected into a container style object for real-time visual mutation.
+### Ignition Sequence (Local Execution)
 
-### D. The Code Transpiler
-In `ExportModal.jsx`, a custom loop iterates through the active element tree, mapping each Indie-Module to raw, production-ready HTML and Tailwind CSS. It injects Google Font links (Syne/Inter) automatically to ensure the exported site matches the builder.
+1. **Board the Repository**
+   ```bash
+   git clone https://github.com/Rockstar-Dev-Tamil/NoCodex.git
+   cd nocodex
+   ```
 
-## 4. Design Tokens (The Visual Signature)
-- **Display Font:** Syne (800 weight) for tectonic hierarchy.
-- **Body Font:** Inter for technical readability.
-- **Primary Fill:** `#00e5ff` (Cyan) — Used for "Mission Active" states.
-- **Surface Core:** `#060608` (Deep Black) — Zero-gravity background.
-- **Sector Border:** `#1e1e2e` — Subtle "pro-tool" delineations.
+2. **Check Engine Systems**
+   ```bash
+   npm install
+   ```
 
-## 5. Why It Works (The Core Logic)
-NoCodeX doesn't just "place" items; it simulates a Sector Workspace. The layout is strictly grid-based (300px | 1fr | 340px), ensuring your mission controls never overlap with your build results.
+3. **Lift-Off**
+   ```bash
+   npm run dev
+   ```
 
-Your entire project is stored in the browser's Local Storage under the key `nocodex_projects`, making it persistence-ready without requiring a backend for the development phase.
+## 🛰 Security & App State
+Your entire project operates client-side via browser Local Storage (`nocodex_projects`). A robust historical Undo/Redo slice tracks up to 20 snapshot payloads, making it an entirely self-contained, offline-first experience during development.
 
-The system is currently fully locked, synced, and operational. 🚀🏗️✨
+---
+*Built for the next generation of web explorers.* 🚀🏗️✨
